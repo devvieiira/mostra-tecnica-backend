@@ -1,0 +1,19 @@
+#!/bin/sh
+. "$(dirname -- "$0")/_/husky.sh"
+echo "PREPARE COMMIT"
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+
+PROJECT_ROOT=$(git rev-parse --show-toplevel)
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+
+FIELD="$BRANCH_NAME "
+TASK_ID=$(echo "$BRANCH_NAME" | grep -oP '^\w+-\w+')
+
+FIELD="$TASK_ID "
+
+NEW_COMMIT_MSG="$FIELD $COMMIT_MSG"
+echo "$NEW_COMMIT_MSG" > "$COMMIT_MSG_FILE"
+echo $(cat "$COMMIT_MSG_FILE")
+npx --no -- commitlint --edit ${COMMIT_MSG_FILE}
