@@ -59,6 +59,20 @@ export async function ImportAvaliador(app: FastifyInstance) {
 			const worksheet = workbook.Sheets[sheetNames[i]];
 			const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: "A" });
 
+			const formatCpf = (cpf: string) => {
+				const entrada = cpf.replace(/\D+/g, "");
+				const saida = entrada.replace(
+					/^(\d{3})(\d{3})(\d{3})(\d{2})$/,
+					"$1.$2.$3-$4",
+				);
+				return saida;
+			};
+
+			const formatTelefone = (telefone: string) => {
+				const entrada = telefone.replace(/\D+/g, "");
+				return entrada;
+			};
+
 			try {
 				const user = await prisma.usuario.findMany();
 				if (user) {
@@ -72,14 +86,17 @@ export async function ImportAvaliador(app: FastifyInstance) {
 							where: { cpf: response.E.toString() },
 							create: {
 								nome: response.D.toString(),
-								cpf: await encrypt(response.E.toString()),
-								telefone: response.G.toString(),
+								cpf: await encrypt(formatCpf(response.E.toString())),
+								telefone: formatTelefone(response.G.toString()),
 								email: await encrypt(response.F.toString()),
 								avaliador: true,
+								formacao: response.I.toString(),
+								interesse: response.K.toString(),
+								disponilidade: response.L.toString(),
 							},
 							update: {
 								nome: response.D.toString(),
-								telefone: response.G.toString(),
+								telefone: formatTelefone(response.G.toString()),
 								email: await encrypt(response.F.toString()),
 							},
 						});

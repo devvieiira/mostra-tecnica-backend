@@ -14,14 +14,17 @@ datasource db {
 }
 
 model Usuario {
-  id         String      @id @default(uuid())
-  nome       String
-  email      String
-  cpf        String      @unique
-  telefone   String
-  avaliador  Boolean
-  trabalhos  Trabalho[]
-  avaliacoes Avaliacao[]
+  id            String      @id @default(uuid())
+  nome          String
+  email         String
+  cpf           String      @unique
+  telefone      String
+  avaliador     Boolean
+  formacao      String?
+  interesse     String?
+  disponilidade String?
+  trabalhos     Trabalho[]
+  avaliacoes    Avaliacao[]
 }
 
 model Trabalho {
