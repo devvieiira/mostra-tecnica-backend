@@ -68,28 +68,74 @@ export async function ImportTrabalho(app: FastifyInstance) {
 
 			try {
 				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-				const promise = jsonData.map(async (response: any) => {
-					if (response.D !== "Nome:") {
-						await prisma.trabalho.create({
-							data: {
-								instituicao: await encrypt(response.H.toString()),
-								nivel_ensino: await encrypt(response.I.toString()),
-								titulo_trabalho: await encrypt(response.AL.toString()),
-								autor: {
-									create: {
-										nome: response.D.toString(),
-										cpf: await encrypt(formatCpf(response.E.toString())),
-										email: await encrypt(response.F.toString()),
-										telefone: formatTelefone(response.G.toString()),
-										formacao: response.H.toString(),
-										avaliador: false,
-									},
-								},
+				const promise = jsonData.map(async (response: any, index) => {
+					if (index !== 0) {
+						const nome = response.D.toString();
+						console.log(nome);
+						const existingAuthor = await prisma.usuario.findFirst({
+							where: {
+								nome: nome,
 							},
 						});
+
+						// biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
+						let authorId;
+
+						console.log(existingAuthor);
+						console.log(authorId);
+
+						if (!existingAuthor) {
+							const newWork = await prisma.trabalho.create({
+								data: {
+									instituicao: await encrypt(response.H.toString()),
+									nivel_ensino: await encrypt(response.I.toString()),
+									titulo_trabalho: await encrypt(response.AL.toString()),
+									modalidade: response.AK.toString(),
+									area:
+										response.AO !== undefined
+											? response.AO
+											: response.AP === undefined
+												? ""
+												: response.AP,
+									autor: {
+										create: {
+											nome: response.D.toString(),
+											cpf: await encrypt(formatCpf(response.E.toString())),
+											email: await encrypt(response.F.toString()),
+											telefone: formatTelefone(response.G.toString()),
+											formacao: response.H.toString(),
+											avaliador: false,
+										},
+									},
+								},
+							});
+
+							authorId = newWork.id;
+						} else {
+							authorId = existingAuthor.id;
+							console.log(authorId);
+							await prisma.trabalho.create({
+								data: {
+									instituicao: await encrypt(response.H.toString()),
+									nivel_ensino: await encrypt(response.I.toString()),
+									titulo_trabalho: await encrypt(response.AL.toString()),
+									modalidade: response.AK.toString(),
+									area:
+										response.AO !== undefined
+											? response.AO
+											: response.AP === undefined
+												? ""
+												: response.AP,
+									autor: {
+										connect: {
+											id: authorId,
+										},
+									},
+								},
+							});
+						}
 					}
 				});
-
 				await Promise.all(promise);
 
 				return reply.status(201).send({
@@ -101,6 +147,7 @@ export async function ImportTrabalho(app: FastifyInstance) {
 				return reply.status(403).send({
 					message: err.message,
 					statusCode: 403,
+					error: err,
 				});
 			}
 		}

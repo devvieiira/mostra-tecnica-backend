@@ -7,7 +7,11 @@ export async function deleteAvaliador(app: FastifyInstance) {
 		"/avaliadores",
 		async (req: FastifyRequest, reply: FastifyReply) => {
 			try {
-				await prisma.usuario.deleteMany();
+				await prisma.usuario.deleteMany({
+					where: {
+						avaliador: true,
+					},
+				});
 
 				return reply.status(204).send();
 				// biome-ignore lint/suspicious/noExplicitAny: <explanation>

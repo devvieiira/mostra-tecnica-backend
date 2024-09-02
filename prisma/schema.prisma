@@ -31,7 +31,9 @@ model Trabalho {
   id              String @id @default(uuid())
   titulo_trabalho String
   instituicao     String
+  modalidade      String
   nivel_ensino    String
+  area            String
   usuarioId       String
 
   autor     Usuario     @relation(fields: [usuarioId], references: [id])
