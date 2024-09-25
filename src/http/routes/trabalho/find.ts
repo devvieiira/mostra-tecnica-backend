@@ -18,6 +18,7 @@ export async function getTrabalho(app: FastifyInstance) {
 							cpf: true,
 						},
 					},
+					area: true,
 				},
 			});
 

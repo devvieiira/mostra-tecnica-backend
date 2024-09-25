@@ -6,6 +6,10 @@ import { deleteAvaliador } from "./routes/avaliador/delete";
 import { ImportTrabalho } from "./routes/trabalho/create";
 import { getTrabalho } from "./routes/trabalho/find";
 import { deleteTrabalho } from "./routes/trabalho/delete";
+import { JobDraw } from "./routes/avaliacao/job-draw";
+import { ConnectWork } from "./routes/trabalho/connect-work";
+import { getOneAvaliador } from "./routes/avaliador/find-one";
+import { getOneTrabalho } from "./routes/trabalho/find-one";
 // import multer from "fastify-multer";
 // import { ReadFile } from "./routes/avaliador/readFile";
 
@@ -25,11 +29,17 @@ app.register(cors, {
 app.register(ImportAvaliador);
 app.register(getAvaliadores);
 app.register(deleteAvaliador);
+app.register(getOneAvaliador);
 
 //TRABALHOS
 app.register(ImportTrabalho);
 app.register(getTrabalho);
 app.register(deleteTrabalho);
+app.register(ConnectWork);
+app.register(getOneTrabalho);
+
+//AVALIACAO
+app.register(JobDraw);
 
 app.listen({ port: 4000, host: "0.0.0.0" }).then((value) => {
 	console.log("HTTP Server Running!", value);

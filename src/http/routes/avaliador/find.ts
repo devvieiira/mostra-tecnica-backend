@@ -6,12 +6,22 @@ export async function getAvaliadores(app: FastifyInstance) {
 	app.get("/avaliadores", async (req: FastifyRequest, reply: FastifyReply) => {
 		try {
 			const dbData = await prisma.usuario.findMany({
+				where: {
+					avaliador: true,
+				},
 				select: {
 					id: true,
 					nome: true,
 					email: true,
 					cpf: true,
 					telefone: true,
+					interesse: true,
+					disponilidade: true,
+					trabalhos: {
+						select: {
+							id: true,
+						},
+					},
 				},
 			});
 
