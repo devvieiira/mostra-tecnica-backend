@@ -14,7 +14,7 @@ export async function ImportTrabalho(app: FastifyInstance) {
 	app.post("/trabalho/import", async (req, reply) => {
 		const data = await req.file();
 
-		//Verifica a existencia do arquivo
+		// Verifica a existencia do arquivo
 		if (!data) {
 			return reply.status(404).send({
 				message: "File not provided",
@@ -22,15 +22,14 @@ export async function ImportTrabalho(app: FastifyInstance) {
 		}
 
 		const extension = path.extname(data.filename);
-		//Verifica se o tipo do arquivo é xlsx
+		// Verifica se o tipo do arquivo é xlsx
 		if (extension !== ".xlsx") {
 			return reply.status(400).send({
 				message: "File must be xlsx",
 			});
 		}
 
-		//cria a pasta uploads para o armazenamento do arquivo
-
+		// Cria a pasta uploads para o armazenamento do arquivo
 		fs.access("uploads", fs.constants.F_OK, (err) => {
 			if (err) {
 				fs.mkdirSync("uploads");
@@ -85,55 +84,42 @@ export async function ImportTrabalho(app: FastifyInstance) {
 						console.log(authorId);
 
 						if (!existingAuthor) {
-							const newWork = await prisma.trabalho.create({
+							const newAuthor = await prisma.usuario.create({
 								data: {
-									instituicao: await encrypt(response.H.toString()),
-									nivel_ensino: await encrypt(response.I.toString()),
-									titulo_trabalho: await encrypt(response.AL.toString()),
-									modalidade: response.AK.toString(),
-									area:
-										response.AO !== undefined
-											? response.AO
-											: response.AP === undefined
-												? ""
-												: response.AP,
-									autor: {
-										create: {
-											nome: response.D.toString(),
-											cpf: await encrypt(formatCpf(response.E.toString())),
-											email: await encrypt(response.F.toString()),
-											telefone: formatTelefone(response.G.toString()),
-											formacao: response.H.toString(),
-											avaliador: false,
-										},
-									},
+									nome: response.D.toString(),
+									cpf: await encrypt(formatCpf(response.E.toString())),
+									email: await encrypt(response.F.toString()),
+									telefone: formatTelefone(response.G.toString()),
+									formacao: response.H.toString(),
+									avaliador: false,
 								},
 							});
 
-							authorId = newWork.id;
+							authorId = newAuthor.id;
 						} else {
 							authorId = existingAuthor.id;
 							console.log(authorId);
-							await prisma.trabalho.create({
-								data: {
-									instituicao: await encrypt(response.H.toString()),
-									nivel_ensino: await encrypt(response.I.toString()),
-									titulo_trabalho: await encrypt(response.AL.toString()),
-									modalidade: response.AK.toString(),
-									area:
-										response.AO !== undefined
-											? response.AO
-											: response.AP === undefined
-												? ""
-												: response.AP,
-									autor: {
-										connect: {
-											id: authorId,
-										},
+						}
+
+						await prisma.trabalho.create({
+							data: {
+								instituicao: await encrypt(response.H.toString()),
+								nivel_ensino: await encrypt(response.I.toString()),
+								titulo_trabalho: await encrypt(response.AL.toString()),
+								modalidade: response.AK.toString(),
+								area:
+									response.AO !== undefined
+										? response.AO
+										: response.AP === undefined
+											? ""
+											: response.AP,
+								autores: {
+									connect: {
+										id: authorId,
 									},
 								},
-							});
-						}
+							},
+						});
 					}
 				});
 				await Promise.all(promise);

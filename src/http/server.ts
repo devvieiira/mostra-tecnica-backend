@@ -6,10 +6,11 @@ import { deleteAvaliador } from "./routes/avaliador/delete";
 import { ImportTrabalho } from "./routes/trabalho/create";
 import { getTrabalho } from "./routes/trabalho/find";
 import { deleteTrabalho } from "./routes/trabalho/delete";
-import { JobDraw } from "./routes/avaliacao/job-draw";
 import { ConnectWork } from "./routes/trabalho/connect-work";
 import { getOneAvaliador } from "./routes/avaliador/find-one";
 import { getOneTrabalho } from "./routes/trabalho/find-one";
+import { DisconnectWork } from "./routes/trabalho/remove-connect";
+import { avaliacao } from "./routes/avaliacao/trabalho";
 // import multer from "fastify-multer";
 // import { ReadFile } from "./routes/avaliador/readFile";
 
@@ -37,10 +38,10 @@ app.register(getTrabalho);
 app.register(deleteTrabalho);
 app.register(ConnectWork);
 app.register(getOneTrabalho);
+app.register(DisconnectWork);
 
 //AVALIACAO
-app.register(JobDraw);
-
+app.register(avaliacao);
 app.listen({ port: 4000, host: "0.0.0.0" }).then((value) => {
 	console.log("HTTP Server Running!", value);
 });

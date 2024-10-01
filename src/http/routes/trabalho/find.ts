@@ -11,14 +11,15 @@ export async function getTrabalho(app: FastifyInstance) {
 					instituicao: true,
 					titulo_trabalho: true,
 					nivel_ensino: true,
-					autor: {
+					modalidade: true,
+					area: true,
+					autores: {
 						select: {
 							nome: true,
 							email: true,
 							cpf: true,
 						},
 					},
-					area: true,
 				},
 			});
 
@@ -27,8 +28,13 @@ export async function getTrabalho(app: FastifyInstance) {
 					item.instituicao = await decrypt(item.instituicao);
 					item.titulo_trabalho = await decrypt(item.titulo_trabalho);
 					item.nivel_ensino = await decrypt(item.nivel_ensino);
-					item.autor.email = await decrypt(item.autor.email);
-					item.autor.cpf = await decrypt(item.autor.cpf);
+					item.autores = await Promise.all(
+						item.autores.map(async (autor) => {
+							autor.email = await decrypt(autor.email);
+							autor.cpf = await decrypt(autor.cpf);
+							return autor;
+						}),
+					);
 
 					return item;
 				}),

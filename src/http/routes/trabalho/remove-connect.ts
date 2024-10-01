@@ -7,10 +7,10 @@ interface RouteParams {
 	trabalho: string;
 }
 
-export async function ConnectWork(app: FastifyInstance) {
+export async function DisconnectWork(app: FastifyInstance) {
 	app.register(fastifyMultipart);
 	app.patch<{ Params: RouteParams }>(
-		"/trabalho/avaliador/connect/:avaliador/:trabalho",
+		"/trabalho/avaliador/disconnect/:avaliador/:trabalho",
 		async (req, reply) => {
 			const { trabalho: idTrabalho, avaliador: idAvaliador } = req.params;
 
@@ -21,18 +21,6 @@ export async function ConnectWork(app: FastifyInstance) {
 			}
 
 			try {
-				const trabalho = await prisma.trabalho.findUnique({
-					where: {
-						id: idTrabalho,
-					},
-				});
-
-				if (!trabalho) {
-					return reply.status(404).send({
-						message: "Trabalho not found",
-					});
-				}
-
 				const avaliador = await prisma.usuario.findUnique({
 					where: {
 						id: idAvaliador,
@@ -45,7 +33,19 @@ export async function ConnectWork(app: FastifyInstance) {
 					});
 				}
 
-				// Verifique se o avaliador já está conectado ao trabalho
+				const trabalho = await prisma.trabalho.findUnique({
+					where: {
+						id: idTrabalho,
+					},
+				});
+
+				if (!trabalho) {
+					return reply.status(404).send({
+						message: "Trabalho not found",
+					});
+				}
+
+				// Verifique se o avaliador está conectado ao trabalho
 				const existingConnection = await prisma.trabalho.findFirst({
 					where: {
 						id: idTrabalho,
@@ -57,28 +57,28 @@ export async function ConnectWork(app: FastifyInstance) {
 					},
 				});
 
-				if (existingConnection) {
+				if (!existingConnection) {
 					return reply.status(400).send({
-						message: "Avaliador already connected to trabalho",
+						message: "Avaliador not connected to trabalho",
 					});
 				}
 
-				// Conecte o avaliador ao trabalho
+				// Desconecte o avaliador do trabalho
 				await prisma.trabalho.update({
 					where: {
 						id: idTrabalho,
 					},
 					data: {
 						autores: {
-							connect: {
+							disconnect: {
 								id: idAvaliador,
 							},
 						},
 					},
 				});
 
-				return reply.status(201).send({
-					message: "Trabalho connected to avaliador successfully",
+				return reply.status(200).send({
+					message: "Trabalho disconnected from avaliador successfully",
 				});
 				// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			} catch (err: any) {

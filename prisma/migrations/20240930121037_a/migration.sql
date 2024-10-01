@@ -3,10 +3,12 @@ CREATE TABLE "Usuario" (
     "id" TEXT NOT NULL,
     "nome" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "senha" TEXT NOT NULL,
     "cpf" TEXT NOT NULL,
     "telefone" TEXT NOT NULL,
     "avaliador" BOOLEAN NOT NULL,
+    "formacao" TEXT,
+    "interesse" TEXT,
+    "disponilidade" TEXT,
 
     CONSTRAINT "Usuario_pkey" PRIMARY KEY ("id")
 );
@@ -16,7 +18,9 @@ CREATE TABLE "Trabalho" (
     "id" TEXT NOT NULL,
     "titulo_trabalho" TEXT NOT NULL,
     "instituicao" TEXT NOT NULL,
+    "modalidade" TEXT NOT NULL,
     "nivel_ensino" TEXT NOT NULL,
+    "area" TEXT NOT NULL,
     "usuarioId" TEXT NOT NULL,
 
     CONSTRAINT "Trabalho_pkey" PRIMARY KEY ("id")
