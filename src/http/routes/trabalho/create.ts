@@ -91,7 +91,7 @@ export async function ImportTrabalho(app: FastifyInstance) {
 									email: await encrypt(response.F.toString()),
 									telefone: formatTelefone(response.G.toString()),
 									formacao: response.H.toString(),
-									avaliador: false,
+									role: "NORMAL",
 								},
 							});
 

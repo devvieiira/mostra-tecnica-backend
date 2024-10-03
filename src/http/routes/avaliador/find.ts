@@ -7,7 +7,7 @@ export async function getAvaliadores(app: FastifyInstance) {
 		try {
 			const dbData = await prisma.usuario.findMany({
 				where: {
-					avaliador: true,
+					role: "AVALIADOR",
 				},
 				select: {
 					id: true,

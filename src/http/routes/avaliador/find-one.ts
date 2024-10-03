@@ -13,7 +13,7 @@ export async function getOneAvaliador(app: FastifyInstance) {
 		try {
 			const dbData = await prisma.usuario.findUnique({
 				where: {
-					avaliador: true,
+					role: "AVALIADOR",
 					id: id,
 				},
 				select: {

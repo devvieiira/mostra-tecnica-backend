@@ -14,19 +14,20 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@commitlint/cli": "^19.3.0",
-    "@commitlint/config-conventional": "^19.2.2",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@types/bcrypt": "^5.0.2",
     "@types/crypto-js": "^4.2.2",
-    "@types/node": "^20.14.10",
-    "cz-customizable": "^7.1.0",
-    "husky": "^9.0.11",
-    "prisma": "^5.18.0",
-    "tsup": "^8.2.4",
-    "typescript": "^5.5.3"
+    "@types/node": "^20.16.10",
+    "cz-customizable": "^7.2.1",
+    "husky": "^9.1.6",
+    "prisma": "^5.20.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.2"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
+    "@fastify/jwt": "^8.0.1",
     "@fastify/multipart": "^8.3.0",
     "@prisma/client": "5.18.0",
     "bcrypt": "^5.1.1",
@@ -35,7 +36,7 @@
     "fastify": "^4.28.1",
     "fastify-multer": "^2.0.3",
     "glob": "^11.0.0",
-    "tsx": "^4.16.2",
+    "tsx": "^4.19.1",
     "xlsx": "^0.18.5",
     "zod": "^3.23.8"
   },

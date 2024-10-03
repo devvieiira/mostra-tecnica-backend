@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "Avaliacao" ALTER COLUMN "nota" SET DATA TYPE DOUBLE PRECISION;

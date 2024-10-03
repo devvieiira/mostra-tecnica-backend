@@ -89,7 +89,7 @@ export async function ImportAvaliador(app: FastifyInstance) {
 								cpf: await encrypt(formatCpf(response.E.toString())),
 								telefone: formatTelefone(response.G.toString()),
 								email: await encrypt(response.F.toString()),
-								avaliador: true,
+								role: "AVALIADOR",
 								formacao: response.I.toString(),
 								interesse: response.K.toString(),
 								disponilidade: response.L.toString(),
