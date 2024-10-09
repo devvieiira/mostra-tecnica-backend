@@ -33,8 +33,6 @@ export async function avaliadorSignIn(app: FastifyInstance) {
 				},
 			});
 
-			console.log("AVALIADOR", avaliador);
-
 			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		} catch (error: any) {
 			return reply.status(400).send({

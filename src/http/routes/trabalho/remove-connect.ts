@@ -32,8 +32,6 @@ export async function DisconnectWork(app: FastifyInstance) {
 				});
 			}
 
-			console.log("TESTEEEEEEEEEE", userJWTData);
-
 			const loggedUser = await prisma.usuario.findUnique({
 				where: {
 					id: userJWTData?.id,

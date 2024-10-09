@@ -42,7 +42,6 @@ export async function signIn(app: FastifyInstance) {
 		};
 
 		const data = loginBody.parse(fields);
-		console.log(data);
 		let user: Usuario | null;
 		try {
 			user = await prisma.usuario.findFirst({

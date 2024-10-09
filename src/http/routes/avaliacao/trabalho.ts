@@ -42,9 +42,7 @@ export async function avaliacao(app: FastifyInstance) {
 
 			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			const body: any = req.body;
-			console.log("BODY AAQ", body);
 			const fields = parseBody(body);
-			console.log("fields", fields);
 
 			// Convert strings to numbers and booleans
 			const nota1 = Number.parseInt(fields.nota1, 10);
@@ -66,7 +64,6 @@ export async function avaliacao(app: FastifyInstance) {
 
 			try {
 				const zBody = bodySchema.parse(parsedFields);
-				console.log("parsed ", zBody);
 
 				const average =
 					(zBody.nota1 +

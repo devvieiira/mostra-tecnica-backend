@@ -27,10 +27,6 @@ export async function fileMiddleware(app: FastifyInstance) {
 				file,
 				formFields,
 			};
-
-			console.log("req.isMultipart():", req.isMultipart());
-			console.log("req.body:", req.body);
-			console.log("req.file():", await req.file());
 		} else {
 			return reply.status(400).send({
 				message: "Requisição não é multipart/form-data",

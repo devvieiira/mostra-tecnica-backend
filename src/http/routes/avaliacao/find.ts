@@ -50,7 +50,7 @@ export async function getAllVotedTrabalhos(app: FastifyInstance) {
 					usuario: {
 						select: {
 							nome: true,
-							email: true, // Opcional, depende do que você deseja mostrar
+							email: true,
 						},
 					},
 				},
