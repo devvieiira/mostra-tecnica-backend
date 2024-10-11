@@ -8,7 +8,6 @@ import fstatic from "@fastify/static";
 import path from "node:path";
 
 // routes
-import { signUp } from "./routes/auth/signUp";
 import { signIn } from "./routes/auth/login/admin";
 
 import fastifyMultipart from "@fastify/multipart";
@@ -26,6 +25,7 @@ import { fileMiddleware } from "src/lib/middleware";
 import { avaliadorSignIn } from "./routes/auth/login/avaliador";
 import { getAllVotedTrabalhos } from "./routes/avaliacao/find";
 import { avaliacao } from "./routes/avaliacao/trabalho";
+import { signUp } from "./routes/auth/signUp";
 
 const app = fastify();
 
