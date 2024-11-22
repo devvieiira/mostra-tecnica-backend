@@ -6,7 +6,6 @@ export function parseBody(objeto: any): Record<string, any> {
 	for (const key in objeto) {
 		const field = objeto[key];
 
-		// console.log(field);
 		if (Array.isArray(field)) {
 			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 			values[field[0].fieldname] = field.map((item: any) => item.value);

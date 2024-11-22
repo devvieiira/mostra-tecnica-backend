@@ -7,8 +7,8 @@ interface RouteParams {
 	idUser: string;
 }
 
-export async function getOneTrabalho(app: FastifyInstance) {
-	app.get<{ Params: RouteParams }>("/trabalhos/:idUser", async (req, reply) => {
+export async function getTeste(app: FastifyInstance) {
+	app.get<{ Params: RouteParams }>("/trabalhosPorId/:idUser", async (req, reply) => {
 		const { idUser } = req.params;
 		let userJWTData: UserJWTPayload | null = null;
 
@@ -38,11 +38,7 @@ export async function getOneTrabalho(app: FastifyInstance) {
 		try {
 			const dbData = await prisma.trabalho.findMany({
 				where: {
-					autores: {
-						some: {
-							id: idUser,
-						},
-					},
+					id: idUser,
 				},
 				select: {
 					id: true,

@@ -19,7 +19,6 @@ export async function deleteAvaliador(app: FastifyInstance) {
 				});
 			}
 
-			console.log("TESTEEEEEEEEEE", userJWTData);
 
 			const loggedUser = await prisma.usuario.findUnique({
 				where: {

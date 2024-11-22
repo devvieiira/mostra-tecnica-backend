@@ -42,7 +42,6 @@ export async function ImportTrabalho(app: FastifyInstance) {
 			});
 		}
 
-		console.log("TESTEEEEEEEEEE", userJWTData);
 
 		const loggedUser = await prisma.usuario.findUnique({
 			where: {
@@ -97,7 +96,6 @@ export async function ImportTrabalho(app: FastifyInstance) {
 				const promise = jsonData.map(async (response: any, index) => {
 					if (index !== 0) {
 						const nome = response.D.toString();
-						console.log(nome);
 						const existingAuthor = await prisma.usuario.findFirst({
 							where: {
 								nome: nome,
@@ -107,8 +105,6 @@ export async function ImportTrabalho(app: FastifyInstance) {
 						// biome-ignore lint/suspicious/noImplicitAnyLet: <explanation>
 						let authorId;
 
-						console.log(existingAuthor);
-						console.log(authorId);
 
 						if (!existingAuthor) {
 							const newAuthor = await prisma.usuario.create({
@@ -129,7 +125,6 @@ export async function ImportTrabalho(app: FastifyInstance) {
 							authorId = newAuthor.id;
 						} else {
 							authorId = existingAuthor.id;
-							console.log(authorId);
 						}
 
 						await prisma.trabalho.create({

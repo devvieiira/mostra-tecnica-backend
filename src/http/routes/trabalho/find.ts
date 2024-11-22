@@ -17,7 +17,6 @@ export async function getTrabalho(app: FastifyInstance) {
 			});
 		}
 
-		console.log("TESTEEEEEEEEEE", userJWTData);
 
 		const loggedUser = await prisma.usuario.findUnique({
 			where: {
@@ -44,6 +43,7 @@ export async function getTrabalho(app: FastifyInstance) {
 							nome: true,
 							email: true,
 							cpf: true,
+							role: true,
 						},
 					},
 				},

@@ -26,6 +26,8 @@ import { avaliadorSignIn } from "./routes/auth/login/avaliador";
 import { getAllVotedTrabalhos } from "./routes/avaliacao/find";
 import { avaliacao } from "./routes/avaliacao/trabalho";
 import { signUp } from "./routes/auth/signUp";
+import { getTrabalhosComStatusDeAvaliacao } from "./routes/avaliacao/atribuido";
+import { getTeste } from "./routes/trabalho/teste";
 
 const app = fastify();
 
@@ -34,7 +36,10 @@ config();
 app.register(cors, {
 	origin: process.env.FRONTEND_URL,
 	credentials: true,
-	allowedHeaders: ["Authorization"],
+	allowedHeaders: ["Authorization", "Content-Type"],
+	methods: ["GET", "PUT", "POST", "PATCH" , "DELETE", "OPTIONS"],
+	exposedHeaders: ['Authorization'],
+
 });
 
 app.register(fjwt, {
@@ -57,6 +62,7 @@ app.register(fstatic, {
 
 // routes
 
+app.get('/', () => { return 'hello world'})
 // auth
 app.register(signUp);
 app.register(signIn);
@@ -73,6 +79,9 @@ app.register(getOneTrabalho);
 app.register(getTrabalho);
 app.register(DisconnectWork);
 app.register(avaliacao);
+app.register(getTrabalhosComStatusDeAvaliacao)
+
+app.register(getTeste)
 
 // =======================
 

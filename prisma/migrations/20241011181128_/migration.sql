@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Roles" AS ENUM ('ADMIN', 'VOTER');
+CREATE TYPE "Roles" AS ENUM ('ADMIN', 'AVALIADOR', 'NORMAL');
 
 -- CreateTable
 CREATE TABLE "Usuario" (
@@ -9,7 +9,6 @@ CREATE TABLE "Usuario" (
     "role" "Roles" NOT NULL,
     "cpf" TEXT NOT NULL,
     "telefone" TEXT NOT NULL,
-    "avaliador" BOOLEAN NOT NULL,
     "senha" TEXT,
     "hashSenha" TEXT,
     "formacao" TEXT,

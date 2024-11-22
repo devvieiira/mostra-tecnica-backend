@@ -28,6 +28,9 @@ export async function ConnectWork(app: FastifyInstance) {
 					where: {
 						id: idTrabalho,
 					},
+					include: {
+						autores: true,
+					}
 				});
 
 				if (!trabalho) {
@@ -48,7 +51,6 @@ export async function ConnectWork(app: FastifyInstance) {
 					});
 				}
 
-				console.log("TESTEEEEEEEEEE", userJWTData);
 
 				const loggedUser = await prisma.usuario.findUnique({
 					where: {
@@ -74,6 +76,8 @@ export async function ConnectWork(app: FastifyInstance) {
 					});
 				}
 
+				
+
 				// Verifique se o avaliador já está conectado ao trabalho
 				const existingConnection = await prisma.trabalho.findFirst({
 					where: {
@@ -92,19 +96,22 @@ export async function ConnectWork(app: FastifyInstance) {
 					});
 				}
 
-				// Conecte o avaliador ao trabalho
-				await prisma.trabalho.update({
-					where: {
-						id: idTrabalho,
+				const newList = trabalho.autores.filter((autor) => autor.id !== idAvaliador);
+
+			// Adicione o avaliador à lista, se ele ainda não estiver presente
+			newList.push(avaliador);
+
+			// Conecte o avaliador ao trabalho
+			await prisma.trabalho.update({
+				where: {
+					id: idTrabalho,
+				},
+				data: {
+					autores: {
+						set: newList.map((autor) => ({ id: autor.id })),
 					},
-					data: {
-						autores: {
-							connect: {
-								id: idAvaliador,
-							},
-						},
-					},
-				});
+				},
+			});
 
 				return reply.status(201).send({
 					message: "Trabalho connected to avaliador successfully",

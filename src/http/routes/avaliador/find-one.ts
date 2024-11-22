@@ -24,7 +24,6 @@ export async function getOneAvaliador(app: FastifyInstance) {
 			});
 		}
 
-		console.log("TESTEEEEEEEEEE", userJWTData);
 
 		const loggedUser = await prisma.usuario.findUnique({
 			where: {
@@ -65,8 +64,6 @@ export async function getOneAvaliador(app: FastifyInstance) {
 					dbData.email = await decrypt(dbData.email);
 					return dbData;
 				};
-
-				console.log(dbData.email);
 				const avaliador = await decryptAvaliable();
 
 				return reply.status(200).send({

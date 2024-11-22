@@ -42,7 +42,6 @@ export async function signIn(app: FastifyInstance) {
 		};
 
 		const data = loginBody.parse(fields);
-		console.log(data);
 		let user: Usuario | null;
 		try {
 			user = await prisma.usuario.findFirst({
@@ -80,6 +79,8 @@ export async function signIn(app: FastifyInstance) {
 			email: user.email,
 			name: user.nome,
 		};
+
+		console.log(payload)
 
 		const token = request.jwt.sign(payload);
 
