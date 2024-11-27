@@ -36,7 +36,7 @@ export async function getAllVotedTrabalhos(app: FastifyInstance) {
               instituicao: true,
               area: true,
               nivel_ensino: true,
-              carimbo: true, // Adiciona o campo `carimbo` à seleção
+              carimbo: true,
               autores: { select: { id: true, nome: true, role: true } },
             },
           },
@@ -55,7 +55,6 @@ export async function getAllVotedTrabalhos(app: FastifyInstance) {
         const nivelEnsino = await decrypt(voto.trabalhos.nivel_ensino);
 
         if (!trabalhosAgrupados.has(trabalhoId)) {
-          // Inicializa o objeto se não existir
           trabalhosAgrupados.set(trabalhoId, {
             trabalhoId,
             titulo_trabalho,
@@ -100,7 +99,7 @@ export async function getAllVotedTrabalhos(app: FastifyInstance) {
           instituicao: trabalho.instituicao,
           areaTrabalho: trabalho.areaTrabalho,
           nivelEnsino: trabalho.nivelEnsino,
-          carimbo: trabalho.carimbo, // Inclui `carimbo` na resposta final
+          carimbo: trabalho.carimbo,
           autores: trabalho.autores,
           notas: trabalho.notas,
           notaTotal: notaTotal.toFixed(2),
