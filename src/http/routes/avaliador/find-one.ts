@@ -31,7 +31,7 @@ export async function getOneAvaliador(app: FastifyInstance) {
 			},
 		});
 
-		if (loggedUser?.role !== "ADMIN") {
+		if (loggedUser?.role !== "ADMIN" && loggedUser?.role !== "AVALIADOR") {
 			return reply.status(401).send({
 				message: "Unauthorized",
 			});

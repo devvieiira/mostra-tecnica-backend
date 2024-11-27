@@ -14,8 +14,6 @@ export async function ImportTrabalho(app: FastifyInstance) {
 	app.register(fastifyMultipart);
 	app.post("/trabalho/import", async (req, reply) => {
 		const data = await req.file();
-
-		// Verifica a existencia do arquivo
 		if (!data) {
 			return reply.status(404).send({
 				message: "File not provided",
@@ -23,7 +21,6 @@ export async function ImportTrabalho(app: FastifyInstance) {
 		}
 
 		const extension = path.extname(data.filename);
-		// Verifica se o tipo do arquivo é xlsx
 		if (extension !== ".xlsx") {
 			return reply.status(400).send({
 				message: "File must be xlsx",
@@ -55,7 +52,6 @@ export async function ImportTrabalho(app: FastifyInstance) {
 			});
 		}
 
-		// Cria a pasta uploads para o armazenamento do arquivo
 		fs.access("uploads", fs.constants.F_OK, (err) => {
 			if (err) {
 				fs.mkdirSync("uploads");
