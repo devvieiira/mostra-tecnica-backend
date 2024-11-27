@@ -29,11 +29,7 @@ export async function signUp(app: FastifyInstance) {
 			role: z.enum(["ADMIN", "AVALIADOR", "NORMAL"]),
 		});
 
-		// Acessar os campos do formulário
 		const fields = request.body;
-
-		// Acessar os arquivos enviados
-		const files = request.files;
 
 		const data = loginBody.parse(fields);
 
