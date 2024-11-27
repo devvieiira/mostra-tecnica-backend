@@ -80,8 +80,6 @@ export async function signIn(app: FastifyInstance) {
 			name: user.nome,
 		};
 
-		console.log(payload)
-
 		const token = request.jwt.sign(payload);
 
 		return { accessToken: token };

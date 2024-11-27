@@ -40,6 +40,7 @@ export async function getTrabalhosComStatusDeAvaliacao(app: FastifyInstance) {
           titulo_trabalho: true,
           instituicao: true,
           area: true,
+          carimbo: true,
           autores: { select: { id: true, nome: true, role: true } },
           nivel_ensino: true,
         },
@@ -68,6 +69,7 @@ export async function getTrabalhosComStatusDeAvaliacao(app: FastifyInstance) {
           return {
             trabalhoId: trabalho.id,
             titulo_trabalho,
+            carimbo: trabalho.carimbo,
             instituicao,
             areaTrabalho: trabalho.area,
             autores: trabalho.autores,
