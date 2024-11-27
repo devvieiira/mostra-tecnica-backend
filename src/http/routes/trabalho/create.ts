@@ -129,6 +129,7 @@ export async function ImportTrabalho(app: FastifyInstance) {
 
 						await prisma.trabalho.create({
 							data: {
+								carimbo: response.A ? response.A.toString() : "",
 								instituicao: response.H
 									? await encrypt(response.H.toString())
 									: "",

@@ -4,12 +4,12 @@ import { prisma } from "src/lib/prisma";
 import type { UserJWTPayload } from "src/utils/types";
 
 interface RouteParams {
-	idUser: string;
+	idWork: string;
 }
 
-export async function getOneTrabalho(app: FastifyInstance) {
-	app.get<{ Params: RouteParams }>("/trabalhos/:idUser", async (req, reply) => {
-		const { idUser } = req.params;
+export async function getUniqueWork(app: FastifyInstance) {
+	app.get<{ Params: RouteParams }>("/trabalho/unique/:idWork", async (req, reply) => {
+		const { idWork } = req.params;
 		let userJWTData: UserJWTPayload | null = null;
 
 		try {
@@ -36,17 +36,12 @@ export async function getOneTrabalho(app: FastifyInstance) {
 		}
 
 		try {
-			const dbData = await prisma.trabalho.findMany({
+			const dbData = await prisma.trabalho.findUnique({
 				where: {
-					autores: {
-						some: {
-							id: idUser,
-						},
-					},
+					id: idWork,
 				},
 				select: {
 					id: true,
-					carimbo: true,
 					instituicao: true,
 					titulo_trabalho: true,
 					nivel_ensino: true,
@@ -65,24 +60,23 @@ export async function getOneTrabalho(app: FastifyInstance) {
 			});
 
 			if (dbData) {
-				const trabalhos = await Promise.all(
-					dbData.map(async (item) => {
-						item.instituicao = await decrypt(item.instituicao);
-						item.titulo_trabalho = await decrypt(item.titulo_trabalho);
-						item.nivel_ensino = await decrypt(item.nivel_ensino);
-						item.autores = await Promise.all(
-							item.autores.map(async (autor) => {
-								autor.email = await decrypt(autor.email);
-								autor.cpf = await decrypt(autor.cpf);
-								return autor;
-							}),
-						);
-						return item;
-					}),
-				);
+				const decryptAvaliable = async () => {
+					dbData.instituicao = await decrypt(dbData.instituicao);
+					dbData.titulo_trabalho = await decrypt(dbData.titulo_trabalho)
+					dbData.nivel_ensino = await decrypt(dbData.nivel_ensino)
+					dbData.autores = await Promise.all(
+						dbData.autores.map(async (autor) => {
+							autor.email = await decrypt(autor.email)
+							autor.cpf = await decrypt(autor.cpf)
+							return autor
+						})
+					)
+					return dbData;
+				};
+				const trabalho = await decryptAvaliable();
 
 				return reply.status(200).send({
-					data: trabalhos,
+					data: trabalho,
 				});
 			}
 		} catch (error) {

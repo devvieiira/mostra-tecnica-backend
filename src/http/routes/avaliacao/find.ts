@@ -28,13 +28,15 @@ export async function getAllVotedTrabalhos(app: FastifyInstance) {
         select: {
           usuarioId: true,
           nota: true,
-          inclusao: true, // Vamos garantir que o campo `inclusao` é retornado
+          inclusao: true,
           trabalhos: {
             select: {
               id: true,
               titulo_trabalho: true,
               instituicao: true,
               area: true,
+              nivel_ensino: true,
+              carimbo: true, // Adiciona o campo `carimbo` à seleção
               autores: { select: { id: true, nome: true, role: true } },
             },
           },
@@ -50,6 +52,7 @@ export async function getAllVotedTrabalhos(app: FastifyInstance) {
 
         const instituicao = await decrypt(voto.trabalhos.instituicao);
         const titulo_trabalho = await decrypt(voto.trabalhos.titulo_trabalho);
+        const nivelEnsino = await decrypt(voto.trabalhos.nivel_ensino);
 
         if (!trabalhosAgrupados.has(trabalhoId)) {
           // Inicializa o objeto se não existir
@@ -58,33 +61,32 @@ export async function getAllVotedTrabalhos(app: FastifyInstance) {
             titulo_trabalho,
             instituicao,
             areaTrabalho: voto.trabalhos.area,
+            nivelEnsino,
+            carimbo: voto.trabalhos.carimbo,
             autores: voto.trabalhos.autores.map((autor) => ({
               id: autor.id,
               nome: autor.nome,
               role: autor.role,
-              votou: false, // Inicializa como false
+              votou: false,
             })),
             notas: [],
             votos: [],
-            inclusao: false, // Inicializa o campo inclusao como `false`
+            inclusao: false,
           });
         }
 
         const trabalhoExistente = trabalhosAgrupados.get(trabalhoId);
 
-        // Adiciona a nota e o voto atual
         trabalhoExistente.notas.push(voto.nota);
         trabalhoExistente.votos.push({ usuarioId: voto.usuarioId });
 
-        // Verifica o campo `inclusao` e ajusta o valor se for true
         if (voto.inclusao) {
           trabalhoExistente.inclusao = true;
         }
 
-        // Atualiza o campo `votou` para cada autor, se o autor já recebeu um voto
-        trabalhoExistente.autores = trabalhoExistente.autores.map((autor: { id: any; }) => ({
+        trabalhoExistente.autores = trabalhoExistente.autores.map((autor: { id: any }) => ({
           ...autor,
-          votou: trabalhoExistente.votos.some((v: { usuarioId: any; }) => v.usuarioId === autor.id),
+          votou: trabalhoExistente.votos.some((v: { usuarioId: any }) => v.usuarioId === autor.id),
         }));
       }
 
@@ -97,10 +99,12 @@ export async function getAllVotedTrabalhos(app: FastifyInstance) {
           titulo_trabalho: trabalho.titulo_trabalho,
           instituicao: trabalho.instituicao,
           areaTrabalho: trabalho.areaTrabalho,
+          nivelEnsino: trabalho.nivelEnsino,
+          carimbo: trabalho.carimbo, // Inclui `carimbo` na resposta final
           autores: trabalho.autores,
           notas: trabalho.notas,
           notaTotal: notaTotal.toFixed(2),
-          inclusao: trabalho.inclusao, // Retorna o valor de inclusao (true/false)
+          inclusao: trabalho.inclusao,
         };
       });
 

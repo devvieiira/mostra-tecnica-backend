@@ -26,7 +26,7 @@ export async function signUp(app: FastifyInstance) {
 					(password) => /[#-@]/.test(password),
 					"The password must contain at least one of the special characters: #, -, @",
 				),
-			role: z.enum(["ADMIN", "AVALIADOR"]),
+			role: z.enum(["ADMIN", "AVALIADOR", "NORMAL"]),
 		});
 
 		// Acessar os campos do formulário

@@ -28,6 +28,7 @@ import { avaliacao } from "./routes/avaliacao/trabalho";
 import { signUp } from "./routes/auth/signUp";
 import { getTrabalhosComStatusDeAvaliacao } from "./routes/avaliacao/atribuido";
 import { getTeste } from "./routes/trabalho/teste";
+import { getUniqueWork } from "./routes/trabalho/find-one-work";
 
 const app = fastify();
 
@@ -78,6 +79,7 @@ app.register(deleteTrabalho);
 app.register(getOneTrabalho);
 app.register(getTrabalho);
 app.register(DisconnectWork);
+app.register(getUniqueWork)
 app.register(avaliacao);
 app.register(getTrabalhosComStatusDeAvaliacao)
 

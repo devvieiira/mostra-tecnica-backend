@@ -21,6 +21,7 @@ CREATE TABLE "Usuario" (
 -- CreateTable
 CREATE TABLE "Trabalho" (
     "id" TEXT NOT NULL,
+    "carimbo" TEXT NOT NULL,
     "titulo_trabalho" TEXT NOT NULL,
     "instituicao" TEXT NOT NULL,
     "modalidade" TEXT NOT NULL,
