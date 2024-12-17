@@ -37,9 +37,8 @@ app.register(cors, {
 	origin: process.env.FRONTEND_URL,
 	credentials: true,
 	allowedHeaders: ["Authorization", "Content-Type"],
-	methods: ["GET", "PUT", "POST", "PATCH" , "DELETE", "OPTIONS"],
-	exposedHeaders: ['Authorization'],
-
+	methods: ["GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS"],
+	exposedHeaders: ["Authorization"],
 });
 
 app.register(fjwt, {
@@ -50,6 +49,7 @@ app.addHook("preHandler", (req, _, next) => {
 	req.jwt = app.jwt;
 	return next();
 });
+
 app.register(fCookie, {
 	secret: process.env.COOKIE_SECRET,
 	hook: "preHandler",
@@ -60,44 +60,38 @@ app.register(fstatic, {
 	prefix: "/public/",
 });
 
-// routes
+// Rotas agrupadas com prefixo global "/api"
+app.register(async (appInstance) => {
+	// Rotas principais
+	appInstance.get("/", () => "Hello World");
 
-app.get('/', () => { return 'hello world'})
-// auth
-app.register(signUp);
-app.register(signIn);
-app.register(avaliadorSignIn);
+	// Auth
+	appInstance.register(signUp);
+	appInstance.register(signIn);
+	appInstance.register(avaliadorSignIn);
 
-// =======================
+	// Trabalhos
+	appInstance.register(ConnectWork);
+	appInstance.register(ImportTrabalho);
+	appInstance.register(deleteTrabalho);
+	appInstance.register(getOneTrabalho);
+	appInstance.register(getTrabalho);
+	appInstance.register(DisconnectWork);
+	appInstance.register(getUniqueWork);
+	appInstance.register(avaliacao);
+	appInstance.register(getTrabalhosComStatusDeAvaliacao);
 
-//TRABALHOS
+	// Avaliadores
+	appInstance.register(ImportAvaliador);
+	appInstance.register(deleteAvaliador);
+	appInstance.register(getOneAvaliador);
+	appInstance.register(getAvaliadores);
+	appInstance.register(getAllVotedTrabalhos);
+}, { prefix: "/api" }); // Adiciona o prefixo global "/api"
 
-app.register(ConnectWork);
-app.register(ImportTrabalho);
-app.register(deleteTrabalho);
-app.register(getOneTrabalho);
-app.register(getTrabalho);
-app.register(DisconnectWork);
-app.register(getUniqueWork)
-app.register(avaliacao);
-app.register(getTrabalhosComStatusDeAvaliacao)
-
-
-// =======================
-
-//AVALIADOR
-
-app.register(ImportAvaliador);
-app.register(deleteAvaliador);
-app.register(getOneAvaliador);
-app.register(getAvaliadores);
-app.register(getAllVotedTrabalhos);
-
-// =======================
-
+// Inicializa o servidor
 app.listen({ port: 4000, host: "0.0.0.0" }).then((value) => {
 	console.log("front-url", process.env.FRONTEND_URL);
 	console.log("alteração surtiu efeito");
-
 	console.log("server running", value);
-});
+})

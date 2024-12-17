@@ -33,6 +33,7 @@ export async function getAllVotedTrabalhos(app: FastifyInstance) {
             select: {
               id: true,
               titulo_trabalho: true,
+              modalidade: true,
               instituicao: true,
               area: true,
               nivel_ensino: true,
@@ -59,6 +60,7 @@ export async function getAllVotedTrabalhos(app: FastifyInstance) {
             trabalhoId,
             titulo_trabalho,
             instituicao,
+            modalidade: voto.trabalhos.modalidade,
             areaTrabalho: voto.trabalhos.area,
             nivelEnsino,
             carimbo: voto.trabalhos.carimbo,
@@ -97,6 +99,7 @@ export async function getAllVotedTrabalhos(app: FastifyInstance) {
           trabalhoId: trabalho.trabalhoId,
           titulo_trabalho: trabalho.titulo_trabalho,
           instituicao: trabalho.instituicao,
+          modalidade: trabalho.modalidade,
           areaTrabalho: trabalho.areaTrabalho,
           nivelEnsino: trabalho.nivelEnsino,
           carimbo: trabalho.carimbo,

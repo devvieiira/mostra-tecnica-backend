@@ -34,6 +34,8 @@ export async function getTrabalho(app: FastifyInstance) {
 				select: {
 					id: true,
 					instituicao: true,
+					orientador: true,
+					coorientador: true,
 					titulo_trabalho: true,
 					nivel_ensino: true,
 					modalidade: true,

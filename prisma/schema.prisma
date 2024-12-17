@@ -33,6 +33,8 @@ model Trabalho {
   id              String    @id @default(uuid())
   carimbo         String
   titulo_trabalho String
+  orientador      String
+  coorientador   String
   instituicao     String
   modalidade      String
   nivel_ensino    String
